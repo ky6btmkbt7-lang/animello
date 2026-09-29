@@ -16,6 +16,8 @@ h1{font-size:42px;margin:5px 0 8px;letter-spacing:-1.5px}.sub{color:#c9c9d5;font
 .section{margin-top:20px;padding:20px;border-radius:24px}.section h2{margin-top:0}.controls{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 select{width:100%;padding:13px;border-radius:15px;background:#15182a;color:#fff;border:1px solid #ffffff20}.notice{color:#aaa;font-size:13px;line-height:1.5}
 @media(max-width:700px){.wrap{padding:14px}.hero{grid-template-columns:1fr;padding:15px}.cover{max-width:260px;margin:auto}h1{font-size:32px}.controls{grid-template-columns:1fr}}
+
+.user-rating{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:12px}.stars{display:flex;gap:4px}.star{border:0;background:transparent;color:#777;font-size:30px;cursor:pointer;padding:0;line-height:1}.star.active{color:#ffd34d}.rating-note{color:#aaa;font-size:13px}.similar-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.similar-card{padding:14px;border-radius:20px;background:#ffffff0b;border:1px solid #ffffff14;transition:.2s}.similar-card:hover{transform:translateY(-3px);background:#ffffff12}.similar-cover{height:180px;border-radius:15px;display:flex;align-items:flex-end;padding:14px;font-weight:800;font-size:20px;background:linear-gradient(145deg,#ff299955,#19dcd155,#ffffff10)}.similar-card:nth-child(2) .similar-cover{background:linear-gradient(145deg,#19dcd155,#5d55ff55,#ffffff10)}.similar-card:nth-child(3) .similar-cover{background:linear-gradient(145deg,#ff4eaa55,#ffcc6655,#ffffff10)}.similar-meta{margin-top:10px}.similar-meta small{color:#aaa}@media(max-width:700px){.similar-grid{grid-template-columns:1fr}.similar-cover{height:140px}}
 </style>
 </head>
 <body>
@@ -36,22 +38,34 @@ select{width:100%;padding:13px;border-radius:15px;background:#15182a;color:#fff;
 <div class="notice" style="margin-top:15px">Режиссёр: Макото Синкай</div>
 </div>
 </section>
-<section class="section glass">
-<h2>Настройки просмотра</h2>
-<div class="controls">
-<div><div class="label">Озвучка</div><select><option>Reanimedia</option><option>Дубляж</option><option>Субтитры</option></select></div>
-<div><div class="label">Субтитры</div><select><option>Русские</option><option>English</option><option>Без субтитров</option></select></div>
-<div><div class="label">Качество</div><select><option>1080p</option><option>720p</option><option>480p</option></select></div>
-</div>
-<p class="notice">Выбранные варианты отображаются в интерфейсе; фактическая доступность зависит от источника видео.</p>
-</section>
+
 <section class="section glass"><h2>О фильме</h2><p class="notice">«Твоё имя» — полнометражный аниме-фильм Макото Синкая 2016 года.</p></section>
+
+<section class="section glass">
+<h2>Ваша оценка</h2>
+<div class="user-rating">
+<div class="stars" id="stars">
+<button class="star" data-value="1" onclick="rate(1)">★</button><button class="star" data-value="2" onclick="rate(2)">★</button><button class="star" data-value="3" onclick="rate(3)">★</button><button class="star" data-value="4" onclick="rate(4)">★</button><button class="star" data-value="5" onclick="rate(5)">★</button>
+</div><span class="rating-note" id="ratingNote">Нажмите на звезду</span>
+</div>
+</section>
+<section class="section glass">
+<h2>Похожие аниме</h2>
+<div class="similar-grid">
+<div class="similar-card"><div class="similar-cover">Weathering With You</div><div class="similar-meta"><b>Дитя погоды</b><br><small>Фэнтези · Романтика · Драма</small></div></div>
+<div class="similar-card"><div class="similar-cover">Suzume</div><div class="similar-meta"><b>Судзумэ, закрывающая двери</b><br><small>Фэнтези · Приключения · Драма</small></div></div>
+<div class="similar-card"><div class="similar-cover">A Silent Voice</div><div class="similar-meta"><b>Форма голоса</b><br><small>Драма · Школа · Романтика</small></div></div>
+</div>
+</section>
 </main></div>
 <script>
 function favorite(){let saved=localStorage.getItem('animello-fav')==='1';saved=!saved;localStorage.setItem('animello-fav',saved?'1':'0');updateFav()}
 function updateFav(){let saved=localStorage.getItem('animello-fav')==='1';document.getElementById('fav').textContent=saved?'♥':'♡';document.getElementById('fav2').textContent=saved?'♥ В избранном':'♡ В избранное'}
 function searchAnim(){alert('Поиск Animello появится в следующей версии.')}
-updateFav();
+function rate(value){localStorage.setItem('animello-rating',String(value));updateRating()}
+function updateRating(){let value=Number(localStorage.getItem('animello-rating')||0);document.querySelectorAll('.star').forEach(star=>star.classList.toggle('active',Number(star.dataset.value)<=value));document.getElementById('ratingNote').textContent=value?('Ваша оценка: '+value+'/5'):'Нажмите на звезду'}
+
+updateFav();updateRating();
 </script>
 </body>
 </html>
